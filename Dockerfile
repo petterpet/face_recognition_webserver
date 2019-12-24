@@ -1,9 +1,9 @@
 FROM ubuntu:18.04
 
 # Install dependencies
-RUN apt update
-RUN apt install -y --force-yes --fix-missing python3-pip curl git wget
-RUN apt install -y --force-yes --fix-missing \
+RUN apt-get update
+RUN apt-get install -y --fix-missing python3-pip curl git wget
+RUN apt-get install -y --fix-missing \
     build-essential \
     cmake \
     gfortran \
