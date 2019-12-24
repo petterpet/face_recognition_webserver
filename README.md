@@ -2,7 +2,7 @@
 # Gesichtserkennung inkl. Webserver für Docker
 
 Das Docker Image basiert auf dem [face_recognition](https://github.com/ageitgey/face_recognition) Projekt. \
-Das [Beispiel](https://raw.githubusercontent.com/ageitgey/face_recognition/master/examples/web_service_example.py) wurde so erweitert, dass beliebig viele bekannte Gesichter berücksichtigt werden können.
+Das [Beispiel](https://raw.githubusercontent.com/ageitgey/face_recognition/master/examples/web_service_example.py) wurde so erweitert, dass beliebig viele bekannte Gesichter berücksichtigt werden können. Außerdem werden alle gefunden Gesichter überprüft (nicht nur das erste).
 
 
 ### *License / Lizenz*
@@ -36,8 +36,10 @@ Nun kann ein Bild hochgeladen werden und als Rückgabe erhält man folgendes JSO
   "status": "'OK' or 'ERROR'",
   "number_of_known_faces": "number",
   "face_found_in_image": "boolean",
+  "number_faces_found_in_image": "number",
   "known_face_found_in_image": "boolean",
-  "persons_name": "string"
+  "number_known_faces_found_in_image": "number",
+  "persons_name": "list"
 }
 ```
 

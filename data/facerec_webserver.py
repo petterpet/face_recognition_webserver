@@ -10,8 +10,10 @@
 #  "status": "'OK' or 'ERROR'",
 #  "number_of_known_faces": "number",
 #  "face_found_in_image": "boolean",
+#  "number_faces_found_in_image": "number",
 #  "known_face_found_in_image": "boolean",
-#  "persons_name": "string"
+#  "number_known_faces_found_in_image": "number",
+#  "persons_name": "list"
 # }
 
 # This example is based on the Flask file upload example: http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
@@ -28,7 +30,7 @@ app = Flask(__name__)
 # Detect known faces
 pictures_known_faces = os.listdir("./known_faces/")
 known_face_encodings = []
-known_persons = []  # List of names of known persons
+known_persons = []  # list of names of known persons
 
 for picture in pictures_known_faces:
     file = "./known_faces/" + picture
@@ -83,35 +85,47 @@ def detect_faces_in_image(file_stream):
     # Initialize some variables
     face_found = False
     known_face_found = False
-    name_of_known_face = ""
+    name_of_known_faces = []
+    number_known_faces_found = 0
+
+    number_faces_found = len(unknown_face_encodings)
+    if number_faces_found > 0:
+        face_found = True
 
     if number_known_faces > 0:
-        if len(unknown_face_encodings) > 0:
-            face_found = True
-            # See if the first face in the uploaded image matches a known face
-            i = 0
-            for known_face_encoding in known_face_encodings:
-                match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if face_found:
+            # See if some faces in the uploaded image matches a known face
+            for unknown_face_encoding in unknown_face_encodings:
+                i = 0
+                for known_face_encoding in known_face_encodings:
+                    match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encoding)
 
-                if match_results[0]:
-                    known_face_found = True
-                    name_of_known_face = known_persons[i]
-                    break
-                i += 1
+                    if match_results[0]:
+                        known_face_found = True
+                        name_of_known_faces.append(known_persons[i])
+                        break
+                    i += 1
+
+        if known_face_found:
+            number_known_faces_found = len(name_of_known_faces)
 
         result = {
             "status": "OK",
             "number_of_known_faces": number_known_faces,
             "face_found_in_image": face_found,
+            "number_faces_found_in_image": number_faces_found,
             "known_face_found_in_image": known_face_found,
-            "persons_name": name_of_known_face
+            "number_known_faces_found_in_image": number_known_faces_found,
+            "persons_names": name_of_known_faces
         }
 
     else:
         # folder with known faces is empty
         result = {
             "status": "ERROR",
-            "number_of_known_faces": number_known_faces
+            "number_of_known_faces": number_known_faces,
+            "face_found_in_image": face_found,
+            "number_faces_found_in_image": number_faces_found
         }
 
     # Return the result as json
