@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+    facerec:
+        container_name: face_recognition
+        restart: unless-stopped
+        build: .
+        network_mode: bridge
+        ports:
+            - "5001:5001"
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./data/:/root/face_rec/
