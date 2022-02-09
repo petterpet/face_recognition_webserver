@@ -23,7 +23,7 @@ RUN apt-get install -y --fix-missing \
     zip \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
-RUN git clone --single-branch https://github.com/davisking/dlib.git
+RUN git clone --single-branch --branch v19.19 https://github.com/davisking/dlib.git
 RUN cd dlib && python3 setup.py install
 
 RUN pip3 install face_recognition flask
